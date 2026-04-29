@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz — Doenças Exantemáticas em Pediatria</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f4f8; color: #1a1a1a; min-height: 100vh; }
+  header { background: #1e3a5f; color: white; padding: 20px 30px; text-align: center; }
+  header h1 { font-size: 22px; margin-bottom: 4px; }
+  header p { font-size: 13px; opacity: 0.8; }
+  .quiz-container { max-width: 800px; margin: 30px auto; padding: 0 16px 60px; }
+  #startScreen { background: white; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  #startScreen h2 { font-size: 20px; color: #1e3a5f; margin-bottom: 12px; }
+  #startScreen p { font-size: 14px; color: #555; margin-bottom: 24px; line-height: 1.6; }
+  .progress-bar-bg { background: #dde3ea; border-radius: 8px; height: 8px; margin-bottom: 8px; }
+  .progress-bar-fill { background: #2563eb; height: 8px; border-radius: 8px; transition: width 0.4s ease; }
+  .progress-label { font-size: 12px; color: #666; margin-bottom: 20px; }
+  .question-card { background: white; border-radius: 12px; padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); margin-bottom: 16px; }
+  .question-number { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #2563eb; letter-spacing: 1px; margin-bottom: 10px; }
+  .question-text { font-size: 15px; line-height: 1.65; color: #1a1a1a; margin-bottom: 22px; }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option-btn { background: #f7f9fc; border: 2px solid #dde3ea; border-radius: 8px; padding: 12px 16px; text-align: left; font-size: 14px; cursor: pointer; transition: background 0.15s, border-color 0.15s; line-height: 1.5; }
+  .option-btn:hover:not(:disabled) { background: #e8f0fe; border-color: #2563eb; }
+  .option-btn.correct { background: #d1fae5; border-color: #16a34a; color: #166534; }
+  .option-btn.wrong { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+  .option-btn:disabled { cursor: default; }
+  .explanation { display: none; background: #f0fdf4; border-left: 4px solid #16a34a; border-radius: 0 8px 8px 0; padding: 14px 16px; margin-top: 14px; font-size: 13px; line-height: 1.6; color: #166534; }
+  .explanation.show { display: block; }
+  .btn-next { display: none; margin-top: 18px; background: #2563eb; color: white; border: none; border-radius: 8px; padding: 12px 28px; font-size: 14px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+  .btn-next:hover { background: #1d4ed8; }
+  .btn-next.show { display: inline-block; }
+  .btn-primary { background: #2563eb; color: white; border: none; border-radius: 8px; padding: 14px 36px; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+  .btn-primary:hover { background: #1d4ed8; }
+  #resultScreen { display: none; background: white; border-radius: 12px; padding: 40px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .score-circle { width: 120px; height: 120px; border-radius: 50%; background: #1e3a5f; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0 auto 20px; }
+  .score-circle .score-num { font-size: 32px; font-weight: 700; }
+  .score-circle .score-denom { font-size: 13px; opacity: 0.8; }
+  #resultScreen h2 { font-size: 20px; color: #1e3a5f; margin-bottom: 10px; }
+  #resultScreen p { font-size: 14px; color: #555; margin-bottom: 24px; }
+  .stats-row { display: flex; justify-content: center; gap: 24px; margin-bottom: 28px; flex-wrap: wrap; }
+  .stat-box { background: #f7f9fc; border-radius: 8px; padding: 12px 20px; text-align: center; min-width: 90px; }
+  .stat-box .stat-val { font-size: 22px; font-weight: 700; }
+  .stat-box .stat-lbl { font-size: 11px; color: #888; margin-top: 2px; }
+  .stat-box.green .stat-val { color: #16a34a; }
+  .stat-box.red .stat-val { color: #dc2626; }
+  .stat-box.blue .stat-val { color: #2563eb; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Doenças Exantemáticas em Pediatria</h1>
+  <p>Pediatria — Infectologia Pediátrica</p>
+</header>
+<div class="quiz-container">
+  <div id="startScreen">
+    <h2>Quiz de Revisão</h2>
+    <p>20 questões cobrindo sarampo, rubéola, roséola, eritema infeccioso, escarlatina, varicela, Kawasaki e mpox — agentes, exantemas, tratamento e diagnóstico diferencial.<br><br>Responda cada questão e veja a explicação antes de avançar.</p>
+    <button class="btn-primary" onclick="startQuiz()">Começar Quiz</button>
+  </div>
+  <div id="quizArea" style="display:none;">
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">Questão 0 de 20</div>
+    <div class="question-card" id="questionCard">
+      <div class="question-number" id="questionNumber"></div>
+      <div class="question-text" id="questionText"></div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="explanation" id="explanation"></div>
+      <button class="btn-next" id="btnNext" onclick="nextQuestion()">Próxima questão →</button>
+    </div>
+  </div>
+  <div id="resultScreen">
+    <div class="score-circle">
+      <span class="score-num" id="scoreFinal">0</span>
+      <span class="score-denom" id="scoreDenom">de 20</span>
+    </div>
+    <h2 id="resultTitle"></h2>
+    <p id="resultMsg"></p>
+    <div class="stats-row">
+      <div class="stat-box green"><div class="stat-val" id="statCorrect">0</div><div class="stat-lbl">Acertos</div></div>
+      <div class="stat-box red"><div class="stat-val" id="statWrong">0</div><div class="stat-lbl">Erros</div></div>
+      <div class="stat-box blue"><div class="stat-val" id="statPct">0%</div><div class="stat-lbl">Aproveitamento</div></div>
+    </div>
+    <button class="btn-primary" onclick="restartQuiz()">Refazer Quiz</button>
+  </div>
+</div>
+<script>
+const rawQuestions = [
+  {
+    question: "Qual o achado patognomônico do sarampo, presente na mucosa oral antes do aparecimento do exantema?",
+    options: [
+      "Manchas de Koplik — pontos branco-azulados na mucosa jugal, opostos aos molares inferiores",
+      "Enantema de Forchheimer — petéquias no palato mole",
+      "Manchas de Pastia — hiperpigmentação em dobras cutâneas",
+      "Língua em framboesa — papilas fungiformes hiperemiadas proeminentes",
+      "Sinal de Filatov — palidez perioral com bochechas hiperemiadas"
+    ],
+    correctIndex: 0,
+    explanation: "Manchas de Koplik: pontos brancos com halo vermelho na mucosa jugal, surgem 2 dias antes do exantema e desaparecem 1–2 dias após seu início. São patognomônicas do sarampo. O exantema é morbiliforme, inicia na região retroauricular e evolui céfalo-caudalmente por 3–4 dias."
+  },
+  {
+    question: "Qual o padrão de progressão do exantema no sarampo?",
+    options: [
+      "Morbiliforme (maculopapular), inicia no rosto (região retroauricular) e progride cefalocaudalmente",
+      "Vesicular generalizado, surgindo simultaneamente em face, tronco e membros",
+      "Eritematoso difuso tipo 'papel lixa', iniciando no tronco e se espalhando centrifugamente",
+      "Petequial, iniciando nos membros inferiores e progredindo para o tronco",
+      "Rubeoliforme (roseoliforme), início no tronco e progressão centrífuga"
+    ],
+    correctIndex: 0,
+    explanation: "Sarampo: exantema morbiliforme (maculopapular coalescente), começa na face (retroauricular, fronte) e progride céfalo-caudalmente em 3–4 dias. Febre alta, tosse, coriza, conjuntivite (os 3 C's + exantema). Descamação furfurácea após resolução do exantema."
+  },
+  {
+    question: "Criança de 2 anos com febre baixa por 3 dias que desapareceu abruptamente ao surgir exantema rosado, macular, iniciando no tronco. Qual o diagnóstico?",
+    options: [
+      "Roséola infantil (exantema súbito) — causada por HHV-6 (ou HHV-7)",
+      "Eritema infeccioso — causado por Parvovírus B19",
+      "Sarampo — causado por Paramyxovirus (Morbillivirus)",
+      "Rubéola — causada por Togavirus (Rubivirus)",
+      "Escarlatina — causada por Streptococcus pyogenes (grupo A)"
+    ],
+    correctIndex: 0,
+    explanation: "Roséola infantil (6ª doença): HHV-6 (principalmente) ou HHV-7. Padrão clássico: febre alta (3–5 dias) → desaparece bruscamente → surge exantema rosado macular no tronco (não pruriginoso). Afeta principalmente lactentes de 6–18 meses. Convulsão febril pode ocorrer durante a fase febril. Não requer tratamento específico."
+  },
+  {
+    question: "Qual o achado clínico característico do eritema infeccioso (5ª doença) que dá o nome popular de 'doença da face esbofeteada'?",
+    options: [
+      "Eritema confluente nas bochechas, poupando o triângulo nasolabial, com palidez perioral — simula uma 'bofetada'",
+      "Eritema perioral com hiperemia nas bochechas e palidez central da face",
+      "Petéquias nas bochechas com palidez perioral e adenomegalia pré-auricular",
+      "Exantema vesicular nas bochechas com base eritematosa e halo branco",
+      "Hiperemia difusa de toda a face sem palidez perioral ou triângulo poupado"
+    ],
+    correctIndex: 0,
+    explanation: "Eritema infeccioso (Parvovírus B19 — 5ª doença): Fase 1 = eritema confluente nas bochechas poupando triângulo nasolabial ('face esbofeteada'). Fase 2 = exantema rendilhado em tronco e membros. Fase 3 = recorrências por semanas com calor e exercício. Crise aplásica em pacientes com hemoglobinopatias (falciforme, esferocitose)."
+  },
+  {
+    question: "Qual a tríade clínica clássica da escarlatina?",
+    options: [
+      "Faringoamigdalite estreptocócica + exantema escarlatiniforme (tipo 'lixa') + língua em framboesa",
+      "Febre + exantema vesicular generalizado + adenomegalia cervical",
+      "Febre + exantema morbiliforme crânio-caudal + manchas de Koplik",
+      "Febre + exantema urticariforme + descamação palmo-plantar",
+      "Tosse + coriza + exantema maculopapular retroauricular"
+    ],
+    correctIndex: 0,
+    explanation: "Escarlatina (SBHGA — Streptococcus pyogenes): faringoamigdalite exsudativa + exantema eritematoso papular (sensação de 'papel lixa') + língua em framboesa (papilas fungiformes hiperemiadas). Sinais de Filatov (palidez perioral) e Pastia (hiperpigmentação em dobras). Tratamento: penicilina 10 dias."
+  },
+  {
+    question: "Qual a característica do exantema da varicela que a diferencia das outras doenças exantemáticas?",
+    options: [
+      "Lesões polimórficas simultâneas (máculas, pápulas, vesículas e crostas no mesmo momento) com distribuição centrípeta (mais no tronco)",
+      "Lesões uniformes (apenas vesículas) em diferentes estágios de evolução, com distribuição centrífuga",
+      "Lesões apenas maculopapulares sem vesiculação, com progressão crânio-caudal",
+      "Lesões eritematosas confluentes com poupamento do tronco e predomínio em extremidades",
+      "Vesículas exclusivamente em mucosas oral e genital, sem lesões cutâneas"
+    ],
+    correctIndex: 0,
+    explanation: "Varicela (VZV): polimorfismo simultâneo (máculas → pápulas → vesículas → crostas coexistindo ao mesmo tempo). Distribuição centrípeta (mais intenso no tronco, menos nas extremidades). Pruriginosa. Contagiosa até que todas as lesões se tornem crostas. Tratamento: aciclovir em imunocomprometidos ou formas graves."
+  },
+  {
+    question: "Qual o agente etiológico e o achado típico de adenomegalia na rubéola?",
+    options: [
+      "Togavirus (Rubivirus) — adenomegalia retroauricular, suboccipital e cervical posterior (muito característica)",
+      "Paramyxovirus — adenomegalia cervical anterior bilateral",
+      "Parvovírus B19 — adenomegalia epitroclear e inguinal",
+      "HHV-6 — adenomegalia generalizada com esplenomegalia",
+      "SBHGA — adenomegalia cervical anterior dolorosa"
+    ],
+    correctIndex: 0,
+    explanation: "Rubéola: Togavirus (Rubivirus). Adenomegalia retroauricular, suboccipital e cervical posterior é o achado mais característico, precedendo o exantema. Exantema rubeoliforme (roseoliforme): máculas róseas de tamanho moderado, céfalo-caudal em 3 dias (1 dia em cada segmento). Teratogênica no 1º trimestre (síndrome rubéola congênita)."
+  },
+  {
+    question: "Quais são os critérios diagnósticos da doença de Kawasaki?",
+    options: [
+      "Febre ≥5 dias + ≥4 dos seguintes: conjuntivite bilateral não purulenta, alterações de mucosa oral (lábios fissurados, língua em framboesa), adenomegalia cervical, exantema polimorfo, alterações de extremidades (eritema/descamação palmo-plantar)",
+      "Febre ≥3 dias + ≥3 dos seguintes: conjuntivite, rash cutâneo, adenomegalia e artrite",
+      "Febre ≥7 dias + PCR elevada + ASLO positivo + exantema escarlatiniforme",
+      "Febre ≥5 dias + trombocitose + leucocitose + VHS >100 mm/h",
+      "Febre ≥5 dias + vesículas orais + lesões cutâneas em mãos e pés (Síndrome mão-pé-boca)"
+    ],
+    correctIndex: 0,
+    explanation: "Kawasaki: febre ≥5 dias + ≥4 critérios: (1) conjuntivite bilateral não purulenta; (2) alterações de mucosa oral (lábios hiperemiados/fissurados, língua em framboesa, faringe hiperemiada); (3) adenomegalia cervical >1,5 cm; (4) exantema polimorfo; (5) alterações de extremidades (eritema palmo-plantar → descamação periungueal). Forma incompleta: febre + <4 critérios + coronárias alteradas."
+  },
+  {
+    question: "Qual é o tratamento da doença de Kawasaki e qual a principal complicação cardiovascular?",
+    options: [
+      "IVIG 2 g/kg dose única + AAS — principal complicação: aneurisma de coronárias (risco de infarto do miocárdio)",
+      "Penicilina benzatina + prednisona — complicação: miocardite aguda com IC",
+      "Azitromicina + ibuprofeno — complicação: pericardite constritiva",
+      "Corticosteroide isolado + anticoagulação — complicação: trombose venosa profunda",
+      "Apenas AAS em dose anti-inflamatória — complicação: febre reumática"
+    ],
+    correctIndex: 0,
+    explanation: "Kawasaki: IVIG 2 g/kg IV dose única (nas primeiras 10 dias) + AAS anti-inflamatório (30–100 mg/kg/dia) → após febre ceder: AAS antiplaquetário (3–5 mg/kg/dia por 6–8 semanas). Complicação principal: aneurisma de coronárias (20–25% sem tratamento; <5% com IVIG precoce) → risco de trombose e IAM."
+  },
+  {
+    question: "Criança com faringoamigdalite exsudativa, exantema eritematoso generalizado (sensação de 'lixa') com palidez perioral e hiperpigmentação nas pregas cutâneas. Qual o sinal clínico que descreve a hiperpigmentação das pregas?",
+    options: [
+      "Sinal de Pastia (linhas de Pastia) — hiperpigmentação nas dobras cutâneas (fossa antecubital, região inguinal)",
+      "Sinal de Koplik — pontos brancos na mucosa jugal",
+      "Sinal de Filatov — palidez perioral",
+      "Sinal de Brudzinski — flexão involuntária dos joelhos",
+      "Sinal de Nikolsky — descolamento da pele ao toque"
+    ],
+    correctIndex: 0,
+    explanation: "Escarlatina: Sinal de Pastia = hiperpigmentação por petéquias confluentes nas pregas cutâneas (fossa antecubital, região inguinal, axilas). Sinal de Filatov = palidez perioral com bochechas hiperemiadas. Língua em framboesa. Descamação furfurácea em 1–2 semanas após exantema."
+  },
+  {
+    question: "Qual o período de contagiosidade da varicela?",
+    options: [
+      "De 2 dias antes do exantema até que TODAS as lesões se tornem crostas (geralmente 5–7 dias após início)",
+      "Somente durante a fase vesicular ativa, enquanto há lesões abertas",
+      "Apenas nos primeiros 2 dias do exantema, quando a viremia é mais intensa",
+      "Por 14 dias após o início da febre, independentemente do estágio das lesões",
+      "A varicela não é contagiosa após o início do tratamento com aciclovir"
+    ],
+    correctIndex: 0,
+    explanation: "Varicela: contagiosa de 1–2 dias ANTES do exantema até que TODAS as lesões sejam crostas (sem vesículas ativas). Transmissão por aerossol (altamente contagiosa) e contato direto. Isolamento necessário em ambiente hospitalar (precaução por aerossol). Aciclovir reduz a gravidade mas não elimina a contagiosidade."
+  },
+  {
+    question: "Uma gestante no 1º trimestre é exposta à rubéola. Qual a principal preocupação e qual a síndrome que pode resultar?",
+    options: [
+      "Síndrome da rubéola congênita: catarata + surdez neurossensorial + cardiopatia (persistência do canal arterial e estenose pulmonar) + microcefalia",
+      "Síndrome de Down: risco aumentado de trissomia do cromossomo 21",
+      "Toxoplasmose congênita: calcificações intracranianas e hidrocefalia",
+      "Citomegalovirose congênita: calcificações periventriculares e perda auditiva",
+      "A rubéola materna não apresenta risco para o feto no 1º trimestre"
+    ],
+    correctIndex: 0,
+    explanation: "Síndrome da rubéola congênita: risco de 85–90% no 1º trimestre. Tríade clássica: (1) catarata (+ glaucoma, retinopatia); (2) surdez neurossensorial; (3) cardiopatia (PCA + estenose pulmonar). Também: microcefalia, hepatoesplenomegalia, púrpura, RCIU. Não tem tratamento; prevenção: vacinação pré-concepcional (SCR)."
+  },
+  {
+    question: "Qual a diferença entre mpox (antiga varíola dos macacos) e varicela no padrão do exantema?",
+    options: [
+      "Mpox: lesões monomórficas em mesmo estágio (todas no mesmo estágio de evolução), centrífugas (mais em palmas e plantas), com adenomegalia proeminente; Varicela: polimórficas simultâneas, centrípetas",
+      "Mpox: exclusivamente vesicular, sem lesões papulares ou em crosta; Varicela: maculopapular sem fase vesicular",
+      "Mpox: lesões apenas em mucosa oral e genitais; Varicela: apenas cutâneas sem mucosas",
+      "Mpox: exantema morbiliforme crânio-caudal; Varicela: exantema escarlatiniforme",
+      "Não há diferença no padrão do exantema; diferem apenas no agente etiológico"
+    ],
+    correctIndex: 0,
+    explanation: "Mpox (Orthopoxvirus): lesões MONOMÓRFICAS (todas no mesmo estágio de evolução — ao contrário da varicela que é polimórfica simultânea). Distribuição centrífuga (face → palmas e plantas). Adenomegalia proeminente (diferencia de varicela e varíola). Profundas, dolorosas. Transmissão por contato íntimo/sexual."
+  },
+  {
+    question: "Criança de 8 meses com febre de 39,5°C por 4 dias, sem foco aparente. No 5º dia a febre cedeu e surgiu exantema rosado no tronco. Qual o vírus causador mais provável?",
+    options: [
+      "HHV-6 (Herpesvírus humano tipo 6)",
+      "Parvovírus B19",
+      "Vírus sarampo",
+      "Vírus Epstein-Barr (EBV)",
+      "Vírus varicela-zóster (VZV)"
+    ],
+    correctIndex: 0,
+    explanation: "Roséola infantil: HHV-6 (>90%) ou HHV-7. Padrão diagnóstico: febre alta sem foco por 3–5 dias → desaparece abruptamente → exantema róseo no tronco. Faixa etária: 6–18 meses. Convulsão febril é complicação comum durante a fase febril. Sem tratamento específico necessário."
+  },
+  {
+    question: "Qual é o período de incubação da varicela?",
+    options: [
+      "10–21 dias (média 14–16 dias)",
+      "2–5 dias",
+      "7–10 dias",
+      "21–28 dias",
+      "1–2 dias apenas"
+    ],
+    correctIndex: 0,
+    explanation: "Varicela: incubação de 10–21 dias (média 14–16 dias). Sarampo: 8–14 dias. Rubéola: 14–21 dias. Escarlatina: 1–7 dias. Roséola: 5–15 dias. Eritema infeccioso: 4–21 dias."
+  },
+  {
+    question: "Qual a principal complicação do Parvovírus B19 (eritema infeccioso) em pacientes com anemia hemolítica crônica (ex: falciforme, esferocitose)?",
+    options: [
+      "Crise aplásica transitória — o Parvovírus B19 infecta e destrói precursores eritropoiéticos, levando à aplasia eritroide grave",
+      "Meningite asséptica por disseminação hematogênica do vírus",
+      "Artrite séptica de grandes articulações com derrame articular",
+      "Púrpura trombocitopênica imune por mimetismo molecular com plaquetas",
+      "Hepatite fulminante por infecção direta dos hepatócitos pelo Parvovírus"
+    ],
+    correctIndex: 0,
+    explanation: "Parvovírus B19 infecta e destrói precursores eritropoiéticos (células pronormoblásticas). Em pessoas saudáveis, isso é imperceptível (eritrócitos vivem 120 dias). Em hemólise crônica (meia-vida eritrocitária reduzida e eritropoiese compensatória intensa), causa crise aplásica grave com anemia severa e necessidade de transfusão."
+  },
+  {
+    question: "Criança de 4 anos com febre há 6 dias, conjuntivite bilateral não purulenta, lábios hiperemiados e fissurados, exantema polimorfo e edema de mãos. Qual conduta é URGENTE para prevenir complicação cardiovascular?",
+    options: [
+      "IVIG 2 g/kg dose única + AAS — iniciar dentro dos primeiros 10 dias de febre para reduzir risco de aneurisma coronariano",
+      "Penicilina benzatina IM para cobrir SBHGA como causa do exantema",
+      "Prednisona oral para suprimir a resposta inflamatória sistêmica",
+      "Ecocardiograma e aguardar resultado antes de qualquer tratamento",
+      "Alta hospitalar com AAS em dose plena e retorno em 72 horas"
+    ],
+    correctIndex: 0,
+    explanation: "Kawasaki: diagnóstico clínico. Tratamento URGENTE com IVIG 2 g/kg IV (dose única) + AAS anti-inflamatório deve ser iniciado dentro dos PRIMEIROS 10 DIAS de febre para reduzir o risco de aneurisma coronariano de 20% para <5%. Ecocardiograma é realizado, mas não deve atrasar o início do tratamento."
+  },
+  {
+    question: "Qual das doenças exantemáticas a seguir é NOTIFICAÇÃO COMPULSÓRIA no Brasil?",
+    options: [
+      "Sarampo e rubéola (notificação imediata à Vigilância Epidemiológica)",
+      "Apenas varicela em surtos em creches e escolas",
+      "Roséola infantil e eritema infeccioso em lactentes hospitalizados",
+      "Escarlatina em surtos familiares com >3 casos",
+      "Kawasaki em crianças menores de 5 anos com aneurisma coronariano"
+    ],
+    correctIndex: 0,
+    explanation: "Sarampo e rubéola: notificação compulsória IMEDIATA (dentro de 24h) ao sistema de vigilância epidemiológica. Parte do Programa de Eliminação do Sarampo e da Rubéola da OPAS/OMS. Qualquer caso suspeito deve ser notificado, investigado e coletada sorologia/virologia para confirmação."
+  },
+  {
+    question: "O que caracteriza o exantema da rubéola que a diferencia do sarampo?",
+    options: [
+      "Rubéola: exantema roseoliforme (lesões menores, róseas, discretas) que dura 3 dias (1 dia em cada segmento) + adenomegalia retroauricular; Sarampo: morbiliforme coalescente com manchas de Koplik e febre alta",
+      "Rubéola: morbiliforme intenso com manchas de Koplik; Sarampo: róseo discreto sem manchas",
+      "Rubéola: pruriginosa intensa com vesículas; Sarampo: não pruriginoso sem vesículas",
+      "Rubéola: inicia nos membros e progride para o tronco; Sarampo: inicia no tronco",
+      "Não há diferença significativa entre os exantemas de rubéola e sarampo clinicamente"
+    ],
+    correctIndex: 0,
+    explanation: "Rubéola: exantema roseoliforme (máculas róseas, menores, menos confluentes), progressão céfalo-caudal em 3 dias (some rapidamente em cada segmento), adenomegalia retroauricular proeminente, febre baixa. Sarampo: morbiliforme confluente, febre alta, manchas de Koplik, tosse + coriza + conjuntivite, progressão em 3–4 dias."
+  },
+  {
+    question: "Qual o agente causador da escarlatina e qual o mecanismo do exantema?",
+    options: [
+      "Streptococcus pyogenes (SBHGA) — exotoxina eritrogênica (pirogênica) produzida pela bactéria causa o eritema generalizado",
+      "Staphylococcus aureus — toxina esfoliativa causa descamação e eritema difuso",
+      "SBHGA — a própria bactéria invade a pele causando eritema por inflamação direta",
+      "Streptococcus grupo B — mediado por imunocomplexos depositados na derme",
+      "Streptococcus pneumoniae — a cápsula polissacarídea ativa mastócitos cutâneos"
+    ],
+    correctIndex: 0,
+    explanation: "Escarlatina: SBHGA (grupo A) produz exotoxina eritrogênica (pyrogenic exotoxin A, B ou C) → exantema eritematoso papular generalizado ('lixa'). A faringoamigdalite é o foco primário. Tratamento: penicilina 10 dias (erradica SBHGA e prevebe febre reumática). Descamação furfurácea em 1–2 semanas."
+  }
+];
+
+function shuffleQuestion(q) {
+  const correctText = q.options[q.correctIndex];
+  const shuffled = [...q.options];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return { ...q, options: shuffled, correctIndex: shuffled.indexOf(correctText) };
+}
+function prepareQuestions() {
+  const shuffledQs = [...rawQuestions];
+  for (let i = shuffledQs.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledQs[i], shuffledQs[j]] = [shuffledQs[j], shuffledQs[i]];
+  }
+  return shuffledQs.map(shuffleQuestion);
+}
+let questions = [], currentIndex = 0, score = 0, answered = 0;
+function startQuiz() {
+  questions = prepareQuestions(); currentIndex = 0; score = 0; answered = 0;
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'none';
+  document.getElementById('quizArea').style.display = 'block';
+  renderQuestion();
+}
+function renderQuestion() {
+  const q = questions[currentIndex]; const total = questions.length;
+  document.getElementById('progressBar').style.width = ((currentIndex / total) * 100) + '%';
+  document.getElementById('progressLabel').textContent = `Questão ${currentIndex + 1} de ${total}`;
+  document.getElementById('questionNumber').textContent = `Questão ${currentIndex + 1}`;
+  document.getElementById('questionText').textContent = q.question;
+  const container = document.getElementById('optionsContainer'); container.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button'); btn.className = 'option-btn'; btn.textContent = opt;
+    btn.onclick = () => selectAnswer(i); container.appendChild(btn);
+  });
+  document.getElementById('explanation').classList.remove('show');
+  document.getElementById('explanation').textContent = '';
+  document.getElementById('btnNext').classList.remove('show');
+}
+function selectAnswer(selectedIndex) {
+  const q = questions[currentIndex]; const buttons = document.querySelectorAll('.option-btn');
+  buttons.forEach(btn => btn.disabled = true);
+  if (selectedIndex === q.correctIndex) { buttons[selectedIndex].classList.add('correct'); score++; }
+  else { buttons[selectedIndex].classList.add('wrong'); buttons[q.correctIndex].classList.add('correct'); }
+  answered++;
+  const exp = document.getElementById('explanation'); exp.textContent = q.explanation; exp.classList.add('show');
+  const btnNext = document.getElementById('btnNext');
+  btnNext.textContent = currentIndex < questions.length - 1 ? 'Próxima questão →' : 'Ver resultado';
+  btnNext.classList.add('show');
+}
+function nextQuestion() {
+  currentIndex++;
+  if (currentIndex < questions.length) { renderQuestion(); } else { showResult(); }
+}
+function showResult() {
+  document.getElementById('quizArea').style.display = 'none';
+  document.getElementById('resultScreen').style.display = 'block';
+  const total = questions.length; const pct = Math.round((score / total) * 100);
+  document.getElementById('scoreFinal').textContent = score;
+  document.getElementById('scoreDenom').textContent = `de ${total}`;
+  document.getElementById('statCorrect').textContent = score;
+  document.getElementById('statWrong').textContent = total - score;
+  document.getElementById('statPct').textContent = pct + '%';
+  let title, msg;
+  if (pct >= 90) { title = 'Excelente!'; msg = 'Domínio completo do conteúdo. Você está preparado para a prova.'; }
+  else if (pct >= 70) { title = 'Muito bom!'; msg = 'Bom domínio geral. Revise os pontos onde errou antes da prova.'; }
+  else if (pct >= 50) { title = 'Razoável'; msg = 'Ainda há pontos a consolidar. Releia o relatório e refaça o quiz.'; }
+  else { title = 'Precisa revisar'; msg = 'Recomendo reler o relatório completo antes de tentar novamente.'; }
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultMsg').textContent = msg;
+}
+function restartQuiz() { startQuiz(); }
+</script>
+</body>
+</html>

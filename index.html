@@ -90,9 +90,9 @@ const rawQuestions = [
   {
     question: "Qual o achado patognomônico do sarampo, presente na mucosa oral antes do aparecimento do exantema?",
     options: [
-      "Manchas de Koplik — pontos branco-azulados na mucosa jugal, opostos aos molares inferiores",
-      "Enantema de Forchheimer — petéquias no palato mole",
-      "Manchas de Pastia — hiperpigmentação em dobras cutâneas",
+      "Manchas de Koplik — pontos branco-azulados na mucosa jugal, frente aos molares",
+      "Enantema de Forchheimer — petéquias no palato mole da rubéola",
+      "Manchas de Pastia — hiperpigmentação nas dobras cutâneas da escarlatina",
       "Língua em framboesa — papilas fungiformes hiperemiadas proeminentes",
       "Sinal de Filatov — palidez perioral com bochechas hiperemiadas"
     ],
@@ -102,7 +102,7 @@ const rawQuestions = [
   {
     question: "Qual o padrão de progressão do exantema no sarampo?",
     options: [
-      "Morbiliforme (maculopapular), inicia no rosto (região retroauricular) e progride cefalocaudalmente",
+      "Morbiliforme (maculopapular), início retroauricular e progressão cefalocaudal",
       "Vesicular generalizado, surgindo simultaneamente em face, tronco e membros",
       "Eritematoso difuso tipo 'papel lixa', iniciando no tronco e se espalhando centrifugamente",
       "Petequial, iniciando nos membros inferiores e progredindo para o tronco",
@@ -114,11 +114,11 @@ const rawQuestions = [
   {
     question: "Criança de 2 anos com febre baixa por 3 dias que desapareceu abruptamente ao surgir exantema rosado, macular, iniciando no tronco. Qual o diagnóstico?",
     options: [
-      "Roséola infantil (exantema súbito) — causada por HHV-6 (ou HHV-7)",
+      "Roséola infantil (exantema súbito) — HHV-6 (ou HHV-7)",
       "Eritema infeccioso — causado por Parvovírus B19",
       "Sarampo — causado por Paramyxovirus (Morbillivirus)",
       "Rubéola — causada por Togavirus (Rubivirus)",
-      "Escarlatina — causada por Streptococcus pyogenes (grupo A)"
+      "Escarlatina — causada por Streptococcus pyogenes"
     ],
     correctIndex: 0,
     explanation: "Roséola infantil (6ª doença): HHV-6 (principalmente) ou HHV-7. Padrão clássico: febre alta (3–5 dias) → desaparece bruscamente → surge exantema rosado macular no tronco (não pruriginoso). Afeta principalmente lactentes de 6–18 meses. Convulsão febril pode ocorrer durante a fase febril. Não requer tratamento específico."
@@ -126,7 +126,7 @@ const rawQuestions = [
   {
     question: "Qual o achado clínico característico do eritema infeccioso (5ª doença) que dá o nome popular de 'doença da face esbofeteada'?",
     options: [
-      "Eritema confluente nas bochechas, poupando o triângulo nasolabial, com palidez perioral — simula uma 'bofetada'",
+      "Eritema nas bochechas poupando o triângulo nasolabial, com palidez perioral",
       "Eritema perioral com hiperemia nas bochechas e palidez central da face",
       "Petéquias nas bochechas com palidez perioral e adenomegalia pré-auricular",
       "Exantema vesicular nas bochechas com base eritematosa e halo branco",
@@ -138,7 +138,7 @@ const rawQuestions = [
   {
     question: "Qual a tríade clínica clássica da escarlatina?",
     options: [
-      "Faringoamigdalite estreptocócica + exantema escarlatiniforme (tipo 'lixa') + língua em framboesa",
+      "Faringe exsudativa + exantema tipo 'lixa' + língua em framboesa",
       "Febre + exantema vesicular generalizado + adenomegalia cervical",
       "Febre + exantema morbiliforme crânio-caudal + manchas de Koplik",
       "Febre + exantema urticariforme + descamação palmo-plantar",
@@ -150,8 +150,8 @@ const rawQuestions = [
   {
     question: "Qual a característica do exantema da varicela que a diferencia das outras doenças exantemáticas?",
     options: [
-      "Lesões polimórficas simultâneas (máculas, pápulas, vesículas e crostas no mesmo momento) com distribuição centrípeta (mais no tronco)",
-      "Lesões uniformes (apenas vesículas) em diferentes estágios de evolução, com distribuição centrífuga",
+      "Polimorfismo simultâneo (máculas, pápulas, vesículas e crostas) em distribuição centrípeta",
+      "Lesões uniformes em mesmo estágio de evolução, com distribuição centrífuga",
       "Lesões apenas maculopapulares sem vesiculação, com progressão crânio-caudal",
       "Lesões eritematosas confluentes com poupamento do tronco e predomínio em extremidades",
       "Vesículas exclusivamente em mucosas oral e genital, sem lesões cutâneas"
@@ -162,7 +162,7 @@ const rawQuestions = [
   {
     question: "Qual o agente etiológico e o achado típico de adenomegalia na rubéola?",
     options: [
-      "Togavirus (Rubivirus) — adenomegalia retroauricular, suboccipital e cervical posterior (muito característica)",
+      "Togavirus — adenomegalia retroauricular e suboccipital",
       "Paramyxovirus — adenomegalia cervical anterior bilateral",
       "Parvovírus B19 — adenomegalia epitroclear e inguinal",
       "HHV-6 — adenomegalia generalizada com esplenomegalia",
@@ -174,10 +174,10 @@ const rawQuestions = [
   {
     question: "Quais são os critérios diagnósticos da doença de Kawasaki?",
     options: [
-      "Febre ≥5 dias + ≥4 dos seguintes: conjuntivite bilateral não purulenta, alterações de mucosa oral (lábios fissurados, língua em framboesa), adenomegalia cervical, exantema polimorfo, alterações de extremidades (eritema/descamação palmo-plantar)",
+      "Febre ≥5 dias + ≥4 critérios mucocutâneos: conjuntivite, mucosa oral, exantema, extremidades",
       "Febre ≥3 dias + ≥3 dos seguintes: conjuntivite, rash cutâneo, adenomegalia e artrite",
       "Febre ≥7 dias + PCR elevada + ASLO positivo + exantema escarlatiniforme",
-      "Febre ≥5 dias + trombocitose + leucocitose + VHS >100 mm/h",
+      "Febre ≥5 dias + trombocitose + leucocitose + VHS >100 mm/h, sem critérios clínicos",
       "Febre ≥5 dias + vesículas orais + lesões cutâneas em mãos e pés (Síndrome mão-pé-boca)"
     ],
     correctIndex: 0,
@@ -186,7 +186,7 @@ const rawQuestions = [
   {
     question: "Qual é o tratamento da doença de Kawasaki e qual a principal complicação cardiovascular?",
     options: [
-      "IVIG 2 g/kg dose única + AAS — principal complicação: aneurisma de coronárias (risco de infarto do miocárdio)",
+      "IVIG 2 g/kg dose única + AAS — complicação principal: aneurisma de coronárias",
       "Penicilina benzatina + prednisona — complicação: miocardite aguda com IC",
       "Azitromicina + ibuprofeno — complicação: pericardite constritiva",
       "Corticosteroide isolado + anticoagulação — complicação: trombose venosa profunda",
@@ -198,9 +198,9 @@ const rawQuestions = [
   {
     question: "Criança com faringoamigdalite exsudativa, exantema eritematoso generalizado (sensação de 'lixa') com palidez perioral e hiperpigmentação nas pregas cutâneas. Qual o sinal clínico que descreve a hiperpigmentação das pregas?",
     options: [
-      "Sinal de Pastia (linhas de Pastia) — hiperpigmentação nas dobras cutâneas (fossa antecubital, região inguinal)",
+      "Sinal de Pastia — hiperpigmentação em dobras cutâneas",
       "Sinal de Koplik — pontos brancos na mucosa jugal",
-      "Sinal de Filatov — palidez perioral",
+      "Sinal de Filatov — palidez ao redor da boca",
       "Sinal de Brudzinski — flexão involuntária dos joelhos",
       "Sinal de Nikolsky — descolamento da pele ao toque"
     ],
@@ -210,7 +210,7 @@ const rawQuestions = [
   {
     question: "Qual o período de contagiosidade da varicela?",
     options: [
-      "De 2 dias antes do exantema até que TODAS as lesões se tornem crostas (geralmente 5–7 dias após início)",
+      "De 2 dias antes do exantema até que TODAS as lesões virem crostas",
       "Somente durante a fase vesicular ativa, enquanto há lesões abertas",
       "Apenas nos primeiros 2 dias do exantema, quando a viremia é mais intensa",
       "Por 14 dias após o início da febre, independentemente do estágio das lesões",
@@ -222,7 +222,7 @@ const rawQuestions = [
   {
     question: "Uma gestante no 1º trimestre é exposta à rubéola. Qual a principal preocupação e qual a síndrome que pode resultar?",
     options: [
-      "Síndrome da rubéola congênita: catarata + surdez neurossensorial + cardiopatia (persistência do canal arterial e estenose pulmonar) + microcefalia",
+      "Rubéola congênita: catarata + surdez neurossensorial + cardiopatia (PCA)",
       "Síndrome de Down: risco aumentado de trissomia do cromossomo 21",
       "Toxoplasmose congênita: calcificações intracranianas e hidrocefalia",
       "Citomegalovirose congênita: calcificações periventriculares e perda auditiva",
@@ -234,8 +234,8 @@ const rawQuestions = [
   {
     question: "Qual a diferença entre mpox (antiga varíola dos macacos) e varicela no padrão do exantema?",
     options: [
-      "Mpox: lesões monomórficas em mesmo estágio (todas no mesmo estágio de evolução), centrífugas (mais em palmas e plantas), com adenomegalia proeminente; Varicela: polimórficas simultâneas, centrípetas",
-      "Mpox: exclusivamente vesicular, sem lesões papulares ou em crosta; Varicela: maculopapular sem fase vesicular",
+      "Mpox: monomórfico, centrífugo e com adenomegalia; Varicela: polimórfico e centrípeto",
+      "Mpox: apenas vesicular, sem crosta; Varicela: maculopapular sem vesículas",
       "Mpox: lesões apenas em mucosa oral e genitais; Varicela: apenas cutâneas sem mucosas",
       "Mpox: exantema morbiliforme crânio-caudal; Varicela: exantema escarlatiniforme",
       "Não há diferença no padrão do exantema; diferem apenas no agente etiológico"
@@ -247,10 +247,10 @@ const rawQuestions = [
     question: "Criança de 8 meses com febre de 39,5°C por 4 dias, sem foco aparente. No 5º dia a febre cedeu e surgiu exantema rosado no tronco. Qual o vírus causador mais provável?",
     options: [
       "HHV-6 (Herpesvírus humano tipo 6)",
-      "Parvovírus B19",
-      "Vírus sarampo",
-      "Vírus Epstein-Barr (EBV)",
-      "Vírus varicela-zóster (VZV)"
+      "Parvovírus B19 (eritrovírus)",
+      "Vírus do sarampo (Morbillivirus)",
+      "Vírus Epstein-Barr (EBV, HHV-4)",
+      "Vírus varicela-zóster (VZV, HHV-3)"
     ],
     correctIndex: 0,
     explanation: "Roséola infantil: HHV-6 (>90%) ou HHV-7. Padrão diagnóstico: febre alta sem foco por 3–5 dias → desaparece abruptamente → exantema róseo no tronco. Faixa etária: 6–18 meses. Convulsão febril é complicação comum durante a fase febril. Sem tratamento específico necessário."
@@ -258,11 +258,11 @@ const rawQuestions = [
   {
     question: "Qual é o período de incubação da varicela?",
     options: [
-      "10–21 dias (média 14–16 dias)",
-      "2–5 dias",
-      "7–10 dias",
-      "21–28 dias",
-      "1–2 dias apenas"
+      "10–21 dias (média de 14–16 dias)",
+      "2–5 dias (média de 3–4 dias)",
+      "7–10 dias (média de 8–9 dias)",
+      "21–28 dias (média de 24–25 dias)",
+      "1–2 dias (incubação muito curta)"
     ],
     correctIndex: 0,
     explanation: "Varicela: incubação de 10–21 dias (média 14–16 dias). Sarampo: 8–14 dias. Rubéola: 14–21 dias. Escarlatina: 1–7 dias. Roséola: 5–15 dias. Eritema infeccioso: 4–21 dias."
@@ -270,7 +270,7 @@ const rawQuestions = [
   {
     question: "Qual a principal complicação do Parvovírus B19 (eritema infeccioso) em pacientes com anemia hemolítica crônica (ex: falciforme, esferocitose)?",
     options: [
-      "Crise aplásica transitória — o Parvovírus B19 infecta e destrói precursores eritropoiéticos, levando à aplasia eritroide grave",
+      "Crise aplásica — Parvovírus B19 destrói precursores eritropoiéticos",
       "Meningite asséptica por disseminação hematogênica do vírus",
       "Artrite séptica de grandes articulações com derrame articular",
       "Púrpura trombocitopênica imune por mimetismo molecular com plaquetas",
@@ -282,7 +282,7 @@ const rawQuestions = [
   {
     question: "Criança de 4 anos com febre há 6 dias, conjuntivite bilateral não purulenta, lábios hiperemiados e fissurados, exantema polimorfo e edema de mãos. Qual conduta é URGENTE para prevenir complicação cardiovascular?",
     options: [
-      "IVIG 2 g/kg dose única + AAS — iniciar dentro dos primeiros 10 dias de febre para reduzir risco de aneurisma coronariano",
+      "IVIG 2 g/kg + AAS nos primeiros 10 dias — previne aneurisma coronariano",
       "Penicilina benzatina IM para cobrir SBHGA como causa do exantema",
       "Prednisona oral para suprimir a resposta inflamatória sistêmica",
       "Ecocardiograma e aguardar resultado antes de qualquer tratamento",
@@ -294,7 +294,7 @@ const rawQuestions = [
   {
     question: "Qual das doenças exantemáticas a seguir é NOTIFICAÇÃO COMPULSÓRIA no Brasil?",
     options: [
-      "Sarampo e rubéola (notificação imediata à Vigilância Epidemiológica)",
+      "Sarampo e rubéola (notificação compulsória imediata)",
       "Apenas varicela em surtos em creches e escolas",
       "Roséola infantil e eritema infeccioso em lactentes hospitalizados",
       "Escarlatina em surtos familiares com >3 casos",
@@ -306,7 +306,7 @@ const rawQuestions = [
   {
     question: "O que caracteriza o exantema da rubéola que a diferencia do sarampo?",
     options: [
-      "Rubéola: exantema roseoliforme (lesões menores, róseas, discretas) que dura 3 dias (1 dia em cada segmento) + adenomegalia retroauricular; Sarampo: morbiliforme coalescente com manchas de Koplik e febre alta",
+      "Rubéola: roseoliforme discreto + adenomegalia retroauricular; Sarampo: morbiliforme + manchas de Koplik",
       "Rubéola: morbiliforme intenso com manchas de Koplik; Sarampo: róseo discreto sem manchas",
       "Rubéola: pruriginosa intensa com vesículas; Sarampo: não pruriginoso sem vesículas",
       "Rubéola: inicia nos membros e progride para o tronco; Sarampo: inicia no tronco",
@@ -318,7 +318,7 @@ const rawQuestions = [
   {
     question: "Qual o agente causador da escarlatina e qual o mecanismo do exantema?",
     options: [
-      "Streptococcus pyogenes (SBHGA) — exotoxina eritrogênica (pirogênica) produzida pela bactéria causa o eritema generalizado",
+      "Streptococcus pyogenes (SBHGA) — exotoxina eritrogênica causa o eritema generalizado",
       "Staphylococcus aureus — toxina esfoliativa causa descamação e eritema difuso",
       "SBHGA — a própria bactéria invade a pele causando eritema por inflamação direta",
       "Streptococcus grupo B — mediado por imunocomplexos depositados na derme",
